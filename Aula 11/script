@@ -1,0 +1,23 @@
+library(tidyverse)
+library(ggplot2)
+library(ggridges)
+library (janitor)
+
+#setwd("visualizations/Script R Luciana/")
+
+viz2 <- readxl::read_excel("txpositivo.xlsx") %>%
+  janitor::clean_names()
+
+v=ggplot(viz2, aes(x = propositivo, y = uf, fill = stat(x))) +
+  geom_density_ridges_gradient(scale = 3, rel_min_height = 0.01) +
+  scale_fill_viridis_c(name = "%", option = "C") + xlim(0,36)+
+  theme(legend.position = 'none')+
+  labs(title = 'Proporção de casos positivos entre os casos investigados 
+                segundo Unidade da Federação, 2007-2019') +
+  labs(x = "Proporção (%)",
+       y = "Unidade da Federação-UF") +
+  labs(caption = "Fonte: SIVEP Malaria, 2007-2019") 
+
+v
+
+ggsave(filename = "ridges-pt.png", plot = v, width = 6, height = 6)
